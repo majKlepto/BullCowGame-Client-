@@ -14,6 +14,7 @@ int main(){
 	
 	
 	do {
+		std::cout << "test";
 		PrintIntro();
 		PlayGame();
 	} while (AskToReplay());
