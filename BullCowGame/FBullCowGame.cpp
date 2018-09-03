@@ -1,26 +1,31 @@
 #include "FBullCowGame.h"
 
-void FBullCowGame::Reset()
+
+
+FBullCowGame::FBullCowGame()
 {
-	return;
+	Reset();
 }
 
-int FBullCowGame::getMaxTries()
-{
-	return 0;
+void FBullCowGame::Reset(){
+	myCurrentTry = 1;
+	myMaxTries = 8;
+	return ;
 }
 
-int FBullCowGame::getCurrenttry()
-{
-	return 0;
+int FBullCowGame::getMaxTries() const{
+	
+	return myMaxTries;
 }
 
-bool FBullCowGame::confirmWord(std::string guess)
-{
+int FBullCowGame::getCurrenttry() const{
+	return myCurrentTry;
+}
+
+bool FBullCowGame::confirmWord(FString guess) const{
 	return false;
 }
 
-bool FBullCowGame::checkWord()
-{
+bool FBullCowGame::checkWord() {
 	return false;
 }
