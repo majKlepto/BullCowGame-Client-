@@ -29,19 +29,23 @@ int main(){
 
 void PlayGame()
 {
+	FBullCowCount count;
+	Game.Reset();// resets games values and hidden word to defaults
+
+	int32 maxGuesses = Game.getMaxTries();
+
+	//The turns of the game
+	while(!(Game.IsGameWon()) && Game.getCurrentTry() <= maxGuesses) {
+		
+		ftext guess = getGuess(); //prompts user 4 guess and stores it as a string
+		
 	
-	Game.Reset();
-	int32 MAX_GUESSES = Game.getMaxTries();
-
-	for (int32 i = 0; i < MAX_GUESSES; i++) {
-
-		ftext guess = getGuess();
-		std::cout << "Your guess was " << guess << std::endl;  
-
+		count = Game.awardAnimals(guess); //the method awardAnimals() calculates the amount of bulls and cows  and returns both values in a single type, "struct"
+		std::cout << std::endl << "Bulls: " << count.bulls << std::endl << "Cows: " << count.cows << std::endl;
 	}
 	//TODO give a game summary
 }
-
+  
 bool AskToReplay()
 {
 	std::cout << "Would you like to play again?" << std::endl << "Y = yes, N = no" << std::endl;
@@ -60,17 +64,36 @@ bool AskToReplay()
 	}
 }
 
-std::string getGuess() //TODO needs to validate guess
+std::string getGuess() //TODO needs to validate guess b4 accepting
 {
-	int32 tryNum = Game.getCurrenttry();
-	std::cout << std::endl << "Try " << tryNum << ": Enter your guess" << std::endl;
-	std::string guess = "";
-	getline(std::cin, guess);
-	return guess;
+	EGuessValidity	validity = EGuessValidity::INVALID;
+	do {
+		int32 tryNum = Game.getCurrentTry();
+		std::cout << std::endl << "Try " << tryNum << ": Enter your guess" << std::endl;
+		std::string guess = "";
+		getline(std::cin, guess);
+		validity = Game.confirmWord(guess);	//submits guess to be validated returns an enumeration of the words validity
+		switch (validity)
+		{
+		case EGuessValidity::WRONG_LENGTH:
+			std::cout << "Please enter a word of the correct length." << std::endl << "The correct length should be " << Game.getHiddenWordLength() << " letters long.\n";
+			break;
+		case EGuessValidity::NOT_ISOGRAM:
+			std::cout << "The word entered was not an issogram. An issogram has no repeating letters.\nPlease try again:\n";
+			break;
+		case EGuessValidity::NOT_LOWERCASE:
+			std::cout << "The word entered has uppercase letters. Please re-enter it with only lowercase\n";
+			break;
+		default:
+			return guess;
+
+
+		} 
+	} while (validity != EGuessValidity::OK);
 }
 
-void PrintIntro() {
-	constexpr int32 MAX_LENGTH = 5; 
-	std::cout << "Welcome to Bulls and Cows!\nCan you guess the " << MAX_LENGTH << " letter isogram that I'm thinking of?";
+void PrintIntro() { 
+	 int32 maxLength = Game.getHiddenWordLength(); 
+	std::cout << "Welcome to Bulls and Cows!\nCan you guess the " << maxLength << " letter isogram that I'm thinking of?";
 	return;
 }

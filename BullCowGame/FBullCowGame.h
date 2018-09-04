@@ -1,28 +1,46 @@
 #pragma once
 #include <string>
+using FString = std::string;
+using int32 = int;
+
+
+//enum creates a list of tokens that can be returned to mean different things
+	// in this case the token list represent differnt states of a guessed words validity 
+	// there can be multiple reasons for failure and the enum will be able to tell us why
+	// see confirmWord()
+enum EGuessValidity {
+	INVALID,
+	OK,
+	WRONG_LENGTH,
+	NOT_LOWERCASE,
+	NOT_ISOGRAM,
+
+};
+
+//structs act similarly to a class object but their member variables are public 
+struct FBullCowCount {
+	int32 bulls = 0;
+	int32 cows = 0;
+
+};
 
 class FBullCowGame {
-	using FString = std::string;
-	using int32 = int;
-
 public:
+	
+	FBullCowCount awardAnimals(FString vGuess);
 	FBullCowGame();
-
-	//This is called a destructor, I have no idea what it does
-	~FBullCowGame();
-
 	void Reset();
+
 	// in this context the key word const simply places a safeguard over the function, preventing me from changing any of the member variables while within the function
-	int getMaxTries() const;
-	int getCurrenttry() const;
-	bool confirmWord(std::string guess) const;
-	bool checkWord();
-
-	//TODO create method that will count buls and cows, increment the turn
-
+	int32 getMaxTries() const;
+	int32 getCurrentTry() const;
+	int32 getHiddenWordLength() const;
+	EGuessValidity confirmWord(FString guess) const;
+	bool IsGameWon()const;
 
 private:
 	int32 myCurrentTry;
 	int32 myMaxTries;
+	FString myHiddenWord;
 
 }; 
