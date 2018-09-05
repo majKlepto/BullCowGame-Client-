@@ -1,5 +1,9 @@
 #pragma once
 #include <string>
+#include <map>
+
+//unreal standards
+#define TMap std::map
 using FString = std::string;
 using int32 = int;
 
@@ -27,7 +31,7 @@ struct FBullCowCount {
 class FBullCowGame {
 public:
 	
-	FBullCowCount awardAnimals(FString vGuess);
+	FBullCowCount awardAnimals(FString guess);
 	FBullCowGame();
 	void Reset();
 
@@ -36,11 +40,17 @@ public:
 	int32 getCurrentTry() const;
 	int32 getHiddenWordLength() const;
 	EGuessValidity confirmWord(FString guess) const;
-	bool IsGameWon()const;
+	bool IsGameWon() const;
+	
+	
 
 private:
+	bool isIsogram(FString guess) const;
+	bool isLowerCase(FString guess) const;
+
 	int32 myCurrentTry;
-	int32 myMaxTries;
 	FString myHiddenWord;
+	bool bIsWon;
+
 
 }; 

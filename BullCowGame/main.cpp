@@ -2,6 +2,7 @@
 #include <string>
 #include "FBullCowGame.h"
 
+// these were changed to get more familiar with the unreal standards
 using ftext = std::string;
 using int32 = int;
 
@@ -14,6 +15,8 @@ ftext getGuess();
 FBullCowGame Game;
 void PlayGame();
 bool AskToReplay();
+void PrintSummary();
+
 
 int main(){
 	
@@ -41,9 +44,10 @@ void PlayGame()
 		
 	
 		count = Game.awardAnimals(guess); //the method awardAnimals() calculates the amount of bulls and cows  and returns both values in a single type, "struct"
-		std::cout << std::endl << "Bulls: " << count.bulls << std::endl << "Cows: " << count.cows << std::endl;
+		std::cout << std::endl << "Bulls: " << count.bulls << std::endl << "Cows: " << count.cows << std::endl << std::endl;
 	}
-	//TODO give a game summary
+	PrintSummary();
+
 }
   
 bool AskToReplay()
@@ -64,12 +68,27 @@ bool AskToReplay()
 	}
 }
 
-std::string getGuess() //TODO needs to validate guess b4 accepting
+void PrintSummary()
+{
+	if (Game.IsGameWon())
+	{
+		std::cout << "Congragulations you Won!!!!" << std::endl;
+	}
+	else
+	{
+		std::cout << "Better luck next time!" << std::endl;
+	}
+}
+
+
+
+std::string getGuess() 
 {
 	EGuessValidity	validity = EGuessValidity::INVALID;
 	do {
 		int32 tryNum = Game.getCurrentTry();
-		std::cout << std::endl << "Try " << tryNum << ": Enter your guess" << std::endl;
+		std::cout << std::endl << "Try " << tryNum << ": Enter your guess";
+		std::cout << "(" << Game.getMaxTries() - Game.getCurrentTry() << " tries left)." << std::endl;
 		std::string guess = "";
 		getline(std::cin, guess);
 		validity = Game.confirmWord(guess);	//submits guess to be validated returns an enumeration of the words validity
